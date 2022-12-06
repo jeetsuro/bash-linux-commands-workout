@@ -1,0 +1,696 @@
+﻿
+DATE / Timestamp
+````````````````````````````````````````````````````````
+date
+Tue Dec  6 07:01:14 UTC 2022
+
+Y=$(date -d "-6 day" '+%Y%m%d')
+date --date="$Y 00:00:000" +%s
+1669766400
+
+date -d @1669766400
+Wed Nov 30 00:00:00 UTC 2022
+
+````````````````````````````````````````````````````````
+
+KILL many process at one time [ sudo kill -9 `ps -aef | grep "opennms" | grep -v "grep" | awk {'print $2'}` ]
+
+------------ Play with listing ------------
+<1> extract only extension from file isting
+
+ ls -ltrh *.sh | tail -n 2  | tr -s ' ' 
+
+-rwxr-xr-x 1 esurpau egi 564 Apr 21 22:59 CheckAllFilesInSystem.sh
+-rwxr-xr-x 1 esurpau egi 123 May 28 13:44 ListAllProcessAndNotify.sh
+
+ ls -ltrh *.sh | tail -n 2  | tr -s ' ' | cut -d" " -f9 | cut -d. -f2
+
+sh
+sh
+
+ls -ltrh| tail -n 2  | tr -s ' ' | cut -d" " -f9 | cut -d. -f2
+
+
+• $# represents the parameter count. Useful for controlling loop constructs that need to process each parameter.
+• $@ expands to all the parameters separated by spaces. Useful for passing all the parameters to some other function or program.
+• $- expands to the flags(options) the shell was invoked with. Useful for controlling program flow based on the flags set.
+• $$ expands to the process id of the shell innovated to run the script. Useful for creating unique temporary filenames relative to
+  this instantiation of the script.
+
+net_adm:ping('').
+
+Function	                csh	        sh
+------------------------------------------------------------
+Send stdout to file	          prog > file	prog > file
+Send stderr to file		  prog 2> file
+Send stdout and stderr to file	  prog >& file	prog > file 2>&1
+Take stdin from file	          prog < file	prog < file
+Send stdout to end of file	  prog >> file	prog >> file
+Send stderr to end of file        prog 2>> file
+Read stdin from keyboard until c  prog <<c	prog <<c
+Pipe stdout to prog2	          prog | prog2	prog | prog2
+Pipe stdout and stderr to prog2	  prog |& prog2	prog 2>&1 | prog2
+
+not printing output echo "111" | tee -a /tmp/dd >> /dev/null
+------------------------------------------------------------
+
+chown root:root /file
+chmod ug+rwx,o+x /file
+
+# following line would produce files which are Kilobyte or Megabyte
+ls -lSh | awk '{print $5, $9}' | grep "\(K\|M\)"
+
+#List all file size more than 90 MB
+ls -l | awk '{if ( $5 > 90000000 )print $NF }'
+
+echo "You are user $UID on $HOSTNAME"
+
+#############################################
+Adding a startup script to be run at bootup
+
+
+So you have a script of your own that you want to run at bootup, each time you boot up. This will tell you how to do that.
+
+Write a script. put it in the /etc/init.d/ directory.
+Lets say you called it FOO.sh You then run
+
+% update-rc.d FOO.sh defaults
+
+You also have to make the file you created, FOO, executable, using
+$chmod +x FOO.sh
+###############################################
+
+Find out provided string from given file and count its occurence
+-------------------------------------------------------------------
+grep "LOGFILE" file_accessCount.pl | awk 'BEGIN {tot=0} {tot=tot+1} END {print (tot)}'
+
+###############################################/-------------
+0
+
+find out total size of 'file system disk space usage' and convert into MB
+
+df | awk 'BEGIN {tot=0} {tot=tot+$4} END {print (tot)/1000000}'
+
+maximum disk usage
+~~~~~~~~~~~~~~~~~~
+df -h | awk '{print $5}' | cut -d % -f1 | tail -n +2 | sort -n -r | head -1
+
+
+
+find files size more than 5000 bytes 
+------------------------------------
+du -s /home/anindya/*|awk '{ if( $1 > 100 )print $2 }'
+
+
+FIND with awk/ nawk
+~~~~~~~~~~~~~~~~~~~
+Folllowing command fetchs all lines before ( 2 lines before)pattern match happens with 'CREATE TABLE' to next 17 lines from tna.sql file
+
+
+nawk 'c-->0;$0~s{if(b)for(c=b+1;c>1;c--)print r[(NR-c+1)%b];print;c=a}b{r[NR%b]=$0}' b=2 a=17 s="CREATE TABLE \`wdm_trails\`" tna.sql
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wdm_trails` (
+  `trail_id` int(11) NOT NULL AUTO_INCREMENT,
+  `trail_level` varchar(45) NOT NULL,
+  `trail_direction` int(11) DEFAULT '1',
+  `trail_protection` int(11) DEFAULT '0',
+  `trail_name` varchar(300) NOT NULL,
+  `trail_snc_id` varchar(300) DEFAULT NULL,
+  `trail_src_ptp` varchar(200) DEFAULT NULL,
+  `trail_snk_ptp` varchar(200) DEFAULT NULL,
+  `trail_src_me` varchar(10) DEFAULT NULL,
+  `trail_snk_me` varchar(10) DEFAULT NULL,
+  `trail_wl` varchar(100) DEFAULT NULL,
+  `trail_bearer_rate` varchar(100) DEFAULT NULL,
+  `trail_remark1` varchar(128) DEFAULT NULL,
+  `trail_remark2` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`trail_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3633 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+[tna@bali /tna_data/db_bkp]$ 
+
+
+###############################################
+
+who | wc -l
+echo "are total number of people logged in at this time."
+
+
+###############################################
+
+    FIND
+   ------
+
+Find ten day old files
+
+#/bin/ksh	
+echo "This script will put the names of ten day old files in /tmp in /tmp/checkold.txt file"
+find /tmp -size 0 -atime +10 -exec ls -l {} \;
+
+--> find ./ -mtime -1 -type f -name "*.sql" -exec cp {} /targetDir/ \; // find all files  which are modified within last 1 day from current time and && copy them into /targetDir
+
+Newer less than 3 days bigger (more than 5byte) files on $SysName 
+
+find / -type f -mtime -3 -size +5000 -exec ls -ld {} \;  
+
+
+This command will find the .java files with group name surajit and delete them while also writing the name of deleted file in mycompcore.
+
+
+find / -name .java -group surajit -print -exec rm -f {} \; >>
+
+find /home/surajit/javaTesting/ -name java -print -exec ls -ld {} \;
+
+find systemProperties -type f 1> lastm2.txt 2> /tmp/tt ( this command woul thorow ERROR command to /tmp/tt )
+
+Find all .csv file with below pattern that lies with given time range
+########################################################################################
+file_pattern1="*_IRNOTIF_*.csv"
+prev_time_sec=`expr ${current_time_sec} - $interval_in_sec - $buffer_time_in_sec - $db_delay`
+current_time_format=`date -d @${current_time_sec}  +"%Y-%m-%d %T"`
+prev_time_format=`date -d @${prev_time_sec} +"%Y-%m-%d %T"`
+`find ${sftp_home_path} -type f -newerct "${prev_time_format}" ! -newerct "${current_time_format}" -name "${file_pattern1}" | xargs ls -lth | awk '{ printf("%-8s\n", $9)}' > ${temp_file}`
+
+########################################################################################
+
+Imp,...
+<Folding>
+
+echo test | fold -w 1
+t
+e
+s
+t
+
+        SORT
+        -----
+sort -t : -k 3,4 /etc/passwd "sorts the same file using both the user ID and the group ID."
+
+sort -g filename ; file anme consist of only numeric value 
+
+people.txt
+----------
+Jim Alchin  212121 Seattle
+Bill Gates 404404 Seattle
+Steve Jobs 246810 Nevada 
+Scott Neally 212277 Los Angeles 
+
+sort -k 3,3 people.txt> sorted.txt
+
+ls -l | sort -n -r -k 5
+-rw-r--r-- 1 root root 1057 1 mar 20:12 ring+star
+-rw-r--r-- 1 root root 727 1 mar 20:12 A_star
+-rw-r--r-- 1 root root 535 1 mar 20:12 star2
+-rw-r--r-- 1 root root 505 1 mar 20:12 spirals_and_stars
+
+#########################################
+
+http://www.cyberciti.biz/faq/howto-linux-add-user-to-group/
+
+     ADD USER and GROUP
+    --------------------
+
+The usermod command modifies a user account i.e. it is useful to add user to existing group. There are two types of group. First is primary user group and other is secondary group. All user account related information is stored in /etc/passwd, /etc/shadow and /etc/group
+
+
+
+ /etc/shadow file stores actual password in encrypted format for user's account with additional properties related to user password i.e. it stores secure user account information. All fields are separated by a colon (:) symbol. It contains one entry per line for each user listed in /etc/passwd file Generally, shadow file entry looks as follows (click to enlarge image):
+
+
+
+useradd Example - Add A New User To Secondary Group
+
+You need to the useradd command to add new users to existing group (or create a new group and then add user). If group does not exist, create it. The syntax is as follows:
+useradd -G {group-name} username
+
+In this example, create a new user called vivek and add it to group called developers. First login as a root user (make sure group developers exists), enter:
+# grep developers /etc/group
+Output:
+
+developers:x:1124:
+
+If you do not see any output then you need to add group developers using groupadd command:
+# groupadd developers
+
+Next, add a user called vivek to group developers:
+# useradd -G developers vivek
+
+Setup password for user vivek:
+# passwd vivek
+
+Ensure that user added properly to group developers:
+# id vivekOutput:
+
+uid=1122(vivek) gid=1125(vivek) groups=1125(vivek),1124(developers)
+
+Please note that capital G (-G) option add user to a list of supplementary groups. Each group is separated from the next by a comma, with no intervening whitespace. For example, add user jerry to groups admins, ftp, www, and developers, enter:
+# useradd -G admins,ftp,www,developers jerry
+
+
+
+useradd example - Add a new user to primary group
+
+To add a user tony to group developers use following command:
+# useradd -g developers tony
+# id tony
+Sample outputs:
+
+uid=1123(tony) gid=1124(developers) groups=1124(developers)
+
+
+usermod example - Add a existing user to existing group
+
+Add existing user tony to ftp supplementary/secondary group with usermod command using -a option ~ i.e. add the user to the supplemental group(s). Use only with -G option :
+# usermod -a -G ftp tony
+
+Change existing user tony primary group to www:
+# usermod -g www tony
+
+
+a complete command
+------------------
+useradd -u 100 -g other -d /export/home/newuser1 -m -s /bin/bsh -c “Regular User Account ” newuser1
+
+=================================================================================================================
+
+ SED 
+-----
+sed '/^ *$/d' fileame > newWithoutBlanLine   # remove blank lines from file and create new file
+
+echo "#W@=@ZZ==ZZ=sur*rr$" | sed -e 's/^[^=]*=//'
+@ZZ==ZZ=sur*rr$
+
+
+echo "test line XA123 test" | sed 's/.*X\(.*[^ ]\)/X\1/'| awk '{print $1}'
+XA123
+
+echo "-ACV"| sed 's/-\([A-Z]*\)/ \1/'   --- > here \1 implies '1st matched word'
+ ACV
+ 
+echo "drwxr-xr-x - eea eea 91 2022-12-01 16:31 maprfs://eeapb473-ds:7222/eea_data/aggregated/set_of_tmo_kpis_by_imsi/onehour/ts=1669694400" | sed -e '/ts=/!d' -e 's/.*ts=/ts=/'
+ts=1669694400
+
+test.txt
+--------
+Found 367 items
+drwxr-xr-x   - eea eea          1 2022-12-05 04:12 maprfs://eeapb473-ds:7222/eea_data/aggregated/set_of_tmo_kpis_by_imsi/onehour/6d66eea0-f9a3-4079-bf12-d5fa0d1fe32c
+drwxr-xr-x   - eea eea          3 2022-07-08 18:17 maprfs://eeapb473-ds:7222/eea_data/aggregated/set_of_tmo_kpis_by_imsi/onehour/7b3ced7c-b11f-4085-bce3-f1fc11b15d8d
+eea         91 2022-11-18 18:05 maprfs://eeapb473-ds:7222/eea_data/aggregated/set_of_tmo_kpis_by_imsi/onehour/ts=1668812400
+drwxr-xr-x   - eea eea         91 2022-11-18 18:50 maprfs://eeapb473-ds:7222/eea_data/aggregated/set_of_tmo_kpis_by_imsi/onehour/ts=1668816000
+drwxr-xr-x   - eea eea         91 2022-11-18 20:49 maprfs://eeapb473-ds:7222/eea_data/aggregated/set_of_tmo_kpis_by_imsi/onehour/ts=1668819600
+drwxr-xr-x   - eea eea         91 2022-11-20 02:42 maprfs://eeapb473-ds:7222/eea_data/aggregated/set_of_tmo_kpis_by_imsi/onehour/ts=1668884400
+
+sed -e '/ts=/!d' -e 's/.*ts=/ts=/' test.txt
+ts=1668812400
+ts=1668816000
+ts=1668819600
+ts=1668884400
+
+sed -e '/ts=/!d' -e 's/.*ts=/ts=/' -e "0,/ts=1668819600/d" test.txt  ## 
+ts=1668884400
+
+###################################################################################################################
+AWK
+----
+/xargs
+
+1) Count blank line
+
+awk '/^$/ {c++}END{print c}' fileName
+
+ 
+2) That would print lines which matches foo at first 
+
+awk '/^foo/ { print $0 }' awkTest
+
+
+here, awk contaions 
+-------------------
+fooey        555-1234     2400/1200/300     B
+foot         555-6699     1200/300          B
+macfoo       555-6480     1200/300          A
+sabafoo      555-2127     1200/300          C
+
+but if we write awk script then programming would be like this
+
+awk -f awkProgramming awkTest
+
+awkProgramming contains following lines
+
+/foo/ { print $0 }
+
+
+multiple lines input became single line 
+---------------------------------------
+df -k |grep "^/dev"| awk '{print $6 " " $5 }' | awk '{printf("%s:",$0)}'
+
+
+Deleting duplicating lines but retain its only one occurence
+------------------------------------------------------------
+Using UNIQUE 
+~~~~~~~~~~~~~~
+uniq -ui fullName.txt Final.txt
+hi
+hii
+hi
+hi
+HII
+hii
+
+becomes : hi
+	  hii
+
+Using AWK 
+~~~~~~~~~~~~~~
+awk '!x[$0]++ {print $0}' fullName.txt > Final.txt
+
+hi
+hi
+hii
+hi
+
+becomes : hi
+	  hii
+
+logic :-
+The fourth time, x[hi] will be 2, which gets negated and so it becomes 0.
+
+val	oldval	negate	newval
+hi	0	1	1
+hi	1	0	2
+hii	0	1	1
+hi	2	0	3
+
+
+[x is a array and it's initialized to 0.the index of x is $0,if $0 is first time meet,then plus 1 to the value of x[$0],x[$0] now is 1.As ++ here is "suffix ++",0 is returned and then be added.So !x[$0] is true,the $0 is printed by default.if $0 appears more than once,! x[$0] will be false so won't print $0.]
+
+
+First time when hi comes, x[hi] will be initialized to 0, which is negated and so it becomes 1 and the line is printed. Second time, x[hi] will be 1, which gets negated and so it becomes 0 and the line is not printed.
+
+If I am not wrong, third time, x[hi] will be 0, which gets negated to 1 and the line should be printed. I think there is something I am missing here. Please clarify.
+
+
+###########################################################
+
+	TEST cond
+
+test condition && true-command
+
+OR
+
+test condition || false-command
+
+OR
+
+test condition && true-command || false-command (same as java/C trio checking )
+
+
+
+root@media:/home/surajit# test 5 = 5 && echo "Y" 
+Y
+
+test 5 = 9 || echo No
+No
+
+test 5 = 15 && echo Yes || echo No
+test -f /etc/resolv.conf && echo "File /etc/resolv.conf found." || echo "File /etc/resolv.conf not found."
+
+############################################################
+
+  GREP details
+ --------------
+
+1) A typical grep example - searching for a text string in one file
+grep 'fred' /etc/passwd
+
+2) Linux grep command - searching for a string in multiple files
+grep 'joe' * or grep 'joe' *.txt
+
+3) Case-insensitive file searching with the Unix grep command
+grep -i score gettysburg-address.txt
+
+4) Reversing the meaning of a grep search
+grep -v fred /etc/passwd ; this would select all line expect containing 'fred'
+
+5) Using grep in a Unix/Linux command pipeline
+ps auxwww | grep -i httpd ( case insensitive)
+
+6) Using the Linux grep command to search for multiple patterns at one time (egrep)
+egrep -i 'score|nation|liberty|equal' gettysburg-address.txt
+
+7) Linux grep pattern matching and regular expressions (regex patterns)
+grep '[FG]oo' *
+grep '[0-9][0-9][0-9]' *
+
+8) Display only filenames with a grep search
+grep -l StartInterval *.plist 
+(looking through a lot of files for a pattern, and you just want to find the names of the files that contain your pattern (or "patterns", as shown with egrep) -- but don't want to see each individual grep pattern match -- just add the "-l" (lowercase letter L) to your grep command, like this:)
+
+
+9) Showing matching line numbers with Linux grep
+
+grep -n we gettysburg-address.txt (the line numbers of the files that match your grep command, just add the -n option, like this:)
+
+
+10) grep before/after - Showing lines before or after your grep pattern match
+
+grep -B 5  -A 5 "the living" gettysburg-address.txt (show before, after 5 lines of matched pattern)
+
+
+11) 
+[root@eeape499-ds1 ~]# cat /local/opt/ericsson/eea/ark/config/jboss_conf/domain.xml | grep -iA3 "t-insights.war"
+        <deployment name="automated-expert-insights-2.37.war" runtime-name="automated-expert-insights.war">
+            <content sha1="a7bfae8e0ac7e286c1edf213dce0a6916ae12285"/>
+        </deployment>
+        <deployment name="t-insights.war" runtime-name="t-insights.war">
+            <content sha1="223ad780a65f2e240af7c5ada94a5ac60959408e"/>
+        </deployment>
+        <deployment name="user-preferences-viewer-client-18.10.war" runtime-name="user-preferences-viewer-client-18.10.war">
+
+12) Power file searching with find and grep
+
+find . -type f -exec grep -il 'foo' {} \; 
+(search every file in every subdirectory of my current location. It searches for the string "foo" in every file below the current directory, in a case-insensitive manner.)
+
+  ( here, -type f defines only file type, whereas -type d select only directory )
+
+
+
+find $pathName  -type f -mtime +7  -exec  sh -c 'mv "$1" .' {} {} \;
+
+
+
+	Use of TR
+~~~~~~~~~~	~~~~~~~~~
+tr '[A-Z]' '[a-z]' < $fileName
+ 
+Changing upper case character to lower case, doing this all line line
+-------------------------------------------------------------------------
+tr '[:upper:]' '[:lower:]' < /home/surajit/Desktop/tagwords_dup_sorted.txt > /home/surajit/Desktop/tagwords_dup_sorted_lower.txt
+--------------------------------------------------------------------------
+
+VAR_NAME="SuraJIt"
+echo $VAR_NAME | tr '[:upper:]' '[:lower:]'
+surajit
+
+ 
+===================================================================================
+           << xargs >>
+          -------------
+
+ rm `find /path -type f`
+will fail with an error message of "Argument list too long" if there are too many files in /path. However this version (functionally equivalent to rm `find /path -type f`) will not fail:
+
+ find /path -type f -print0 | xargs -0 rm
+ find /path -type f -exec rm '{}' +
+
+[[ xargs often covers the same functionality as the backquote feature of many shells, but is more flexible and often also safer, especially if there are blanks or special characters in the input. It is a good companion for commands that output long lists of files like find, locate and grep, but only if you use -0, since xargs without -0 deals badly with file names containing ', " and space. ]]
+
+........................................................
+ls | xargs -L 7  < print 7 files in each line > 
+........................................................
+
+find . -name "*.txt" -print0 | xargs -0 -I xxx echo "DIR : " xxx
+DIR :  ./test2.txt
+DIR :  ./test1.txt
+DIR :  ./garbage.txt
+DIR :  ./sorted.txt
+DIR :  ./ImpCommand.txt
+
+The above command uses -I to tell xargs to replace {} with the argument list. Note that not all versions of xargs supports the {} syntax. In those cases you may specify a string after -I that will be replaced, e.g.
+
+ find . -name "*.foo" -print0 | xargs -0 -I xxx cp xxx /tmp/ 
+ The above command uses string xxx instead of {} as the argument list marker.
+........................................................
+
+        Duplicate Line deleting from file 
+      ------------------------------------
+FileA
+
+1253-6856
+3101-4011
+1827-1356
+1822-1157
+1822-1157
+1000-1410
+1000-1410
+1822-1231
+1822-1231
+3101-4011
+1822-1157
+1822-1231
+1253-6856
+........
+
+and I want to simply it with no duplicate line as file below.
+
+NewFileA
+------
+1253-6856
+3101-4011
+1827-1356
+1822-1157
+1000-1410
+1822-1231
+
+
+way 1 ) awk '!x[$0]++' FileA > NewFileA
+way 2 ) sort -u TestFileA | uniq
+---------------------------------------------------
+
+      Reversing File Line
+      --------------------
+File1
+~~~~~~
+line1
+line2
+line3
+.
+.
+lineN
+
+OutputFile1
+~~~~~~~~~~~
+lineN
+..
+line3
+line2
+line1
+
+way 1 ) sed '1!G;h;$!d' file1 
+--------------------------------------------------
+
+ without execution permission shell script can be run
+
+way 1 ) /bin/bash a.sh  [here bash sheel take file as input param n read each line and execute command. so only read perm required.]
+Way 2 ) . a.sh [ current shell do exactly same behavior as I above said ]
+
+=======================================================================
+                Find file tht don't have matched string
+
+Step # 1: Finding all your .mp3 files
+
+Following will just find all your .mp3 files using find command:
+
+# find / -iname "*.mp3" -print
+
+Where,
+=> / - Search / root directory
+=> -iname - File name search pattern (case insensitive)
+=> -print - Display name of files
+Step # 2: Finding and moving all your .mp3 files in one pass
+
+Type the following command to find and move all files to /mnt/mp3 directory:
+# find / -iname "*.mp3" -exec mv {} /mnt/mp3 \;
+
+Where,
+
+    -exec mv {} /mnt/mp3 \;: Execute mv command. The string '{}' is replaced by the file name. \; ends /bin/mv command.
+
+Tip: You just need to move .mp3 files and not directory, use:
+# find / -iname "*.mp3" -type f -exec /bin/mv {} /mnt/mp3 \;
+
+Find all directories having name mp3 and move:
+# find / -iname "*.mp3" -type d -exec /bin/mv {} /mnt/mp3 \;
+
+For performance you may need to consider using xargs command:
+find / -iname "*.mp3" -type f | xargs -I '{}' mv {} /mnt/mp3
+
+ 1) 'Surajit' present in file test1, test2 but I want rest without test1, test2 from tht dir
+
+  ls | xargs -0 grep -L "Surajit"
+                  < Example sample Find >
+
+1. To find files modified in the last 5 days:
+find . -mtime -5
+
+2. To find files modified before 5 days:
+find . -mtime +5
+ Note: Developers, be aware. + is not default in find. If you omit the '+', it has a different meaning. It means to find files modified exactly before 5 days.
+3. To find files modified in the last 40mins:
+find . -mmin -40
+4. To find files modified before 40mins:
+find . -mmin +40
+The above commands will find both files and directories modifying the criteria. If you want to find only files, use the -type option.
+find . -type f -mmin -40
+ This will find only the files modified in the last 40 mins, not directories.
+
+5. By the way,  not in all Unix flavours one will find the -mmin option. If you dont have the mmin option, use the following:
+   First create a dummy file whose timestamp is the time you are looking for:
+touch -d "40 mins ago" temp
+  The above touch command will create a temp file whose timstamp is 40mins before. For example, if the time now is 10hours 50mins, the temp file timstamp will be 10hours 40mins.
+
+If your Unix flavor does not have the "-d" option in the touch command, you can use the following method to set the timestamp:
+touch -t 1008211020 temp
+   This creates a temp file whose time stamp is 2010,Aug 21, 10hours 20mins. [YYMMDDHHMM]
+
+Second, search files which are modified after this file temp has been modified. The below command will display all the files modified after the temp has been modified OR in other words find files which are newer than temp file:
+find . -newer temp
+Similarly, to find files which are modified before 40 mins. In other words to negate the above search, use the exclamation:
+find . ! -newer temp
+  In the same way,  we can find files modified from any time we need.
+
+6. One of the frequent requirement a sys admin gets is to find files modified before say last 2 days and 10 hours 30mins and move them to a backup directory. It can be achieved by the below commands:
+#touch -d "2days 10 hours 30  mins ago" temp
+#find / -type f ! -newer temp -exec mv '{}' ~/backup \;
+The above example does 2 things:
+a. First create a temp file whose timstamp is 2 days 10 hours and 30mins ago.
+b. Finds all the files under root which are older than the temp file and moves them to the backup directory.
+  The same thing using "touch -t" will be like assuming todays date is 21 Aug 2010, 15hours,45mins:
+#touch -t 1008190515 temp
+#find / -type f ! -newer temp -exec mv '{}' ~/backup \;
+
+
+
+=========================================================
+		PLAY with History 
+		~~~~~~~~~~~~~~~~~~
+
+Display timestamp using HISTTIMEFORMAT
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export HISTTIMEFORMAT='%F %T '
+# history | more
+
+Ignore duplicate entry
+~~~~~~~~~~~~~~~~~~~~~~~~
+export HISTCONTROL=ignoredups
+
+Erase duplicates across the whole history using HISTCONTROL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export HISTCONTROL=erasedups	
+
+Ignore specific commands from the history using HISTIGNORE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# export HISTIGNORE="pwd:ls:ls -ltr:"
+# pwd
+# ls
+# ls -ltr
+# service httpd stop
+
+# history | tail -3
+79  export HISTIGNORE="pwd:ls:ls -ltr:"
+80  service httpd stop
+81  history
+
