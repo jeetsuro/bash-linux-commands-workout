@@ -30,7 +30,6 @@ sh
 
 ls -ltrh| tail -n 2  | tr -s ' ' | cut -d" " -f9 | cut -d. -f2
 
-
 • $# represents the parameter count. Useful for controlling loop constructs that need to process each parameter.
 • $@ expands to all the parameters separated by spaces. Useful for passing all the parameters to some other function or program.
 • $- expands to the flags(options) the shell was invoked with. Useful for controlling program flow based on the flags set.
@@ -68,7 +67,6 @@ echo "You are user $UID on $HOSTNAME"
 #############################################
 Adding a startup script to be run at bootup
 
-
 So you have a script of your own that you want to run at bootup, each time you boot up. This will tell you how to do that.
 
 Write a script. put it in the /etc/init.d/ directory.
@@ -95,17 +93,13 @@ maximum disk usage
 ~~~~~~~~~~~~~~~~~~
 df -h | awk '{print $5}' | cut -d % -f1 | tail -n +2 | sort -n -r | head -1
 
-
-
 find files size more than 5000 bytes 
 ------------------------------------
 du -s /home/anindya/*|awk '{ if( $1 > 100 )print $2 }'
 
-
 FIND with awk/ nawk
 ~~~~~~~~~~~~~~~~~~~
 Folllowing command fetchs all lines before ( 2 lines before)pattern match happens with 'CREATE TABLE' to next 17 lines from tna.sql file
-
 
 nawk 'c-->0;$0~s{if(b)for(c=b+1;c>1;c--)print r[(NR-c+1)%b];print;c=a}b{r[NR%b]=$0}' b=2 a=17 s="CREATE TABLE \`wdm_trails\`" tna.sql
 
@@ -131,12 +125,10 @@ CREATE TABLE `wdm_trails` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 [tna@bali /tna_data/db_bkp]$ 
 
-
 ###############################################
 
 who | wc -l
 echo "are total number of people logged in at this time."
-
 
 ###############################################
 
@@ -320,11 +312,9 @@ AWK
 
 awk '/^$/ {c++}END{print c}' fileName
 
- 
 2) That would print lines which matches foo at first 
 
 awk '/^foo/ { print $0 }' awkTest
-
 
 here, awk contaions 
 -------------------
@@ -341,11 +331,9 @@ awkProgramming contains following lines
 
 /foo/ { print $0 }
 
-
 multiple lines input became single line 
 ---------------------------------------
 df -k |grep "^/dev"| awk '{print $6 " " $5 }' | awk '{printf("%s:",$0)}'
-
 
 Deleting duplicating lines but retain its only one occurence
 ------------------------------------------------------------
@@ -358,7 +346,6 @@ hi
 hi
 HII
 hii
-
 becomes : hi
 	  hii
 
@@ -383,14 +370,11 @@ hi	1	0	2
 hii	0	1	1
 hi	2	0	3
 
-
 [x is a array and it's initialized to 0.the index of x is $0,if $0 is first time meet,then plus 1 to the value of x[$0],x[$0] now is 1.As ++ here is "suffix ++",0 is returned and then be added.So !x[$0] is true,the $0 is printed by default.if $0 appears more than once,! x[$0] will be false so won't print $0.]
-
 
 First time when hi comes, x[hi] will be initialized to 0, which is negated and so it becomes 1 and the line is printed. Second time, x[hi] will be 1, which gets negated and so it becomes 0 and the line is not printed.
 
 If I am not wrong, third time, x[hi] will be 0, which gets negated to 1 and the line should be printed. I think there is something I am missing here. Please clarify.
-
 
 ###########################################################
 
@@ -477,10 +461,7 @@ find . -type f -exec grep -il 'foo' {} \;
   ( here, -type f defines only file type, whereas -type d select only directory )
 
 
-
 find $pathName  -type f -mtime +7  -exec  sh -c 'mv "$1" .' {} {} \;
-
-
 
 	Use of TR
 ~~~~~~~~~~	~~~~~~~~~
@@ -493,9 +474,7 @@ tr '[:upper:]' '[:lower:]' < /home/surajit/Desktop/tagwords_dup_sorted.txt > /ho
 
 VAR_NAME="SuraJIt"
 echo $VAR_NAME | tr '[:upper:]' '[:lower:]'
-surajit
-
- 
+surajit 
 ===================================================================================
            << xargs >>
           -------------
@@ -554,7 +533,6 @@ NewFileA
 1822-1157
 1000-1410
 1822-1231
-
 
 way 1 ) awk '!x[$0]++' FileA > NewFileA
 way 2 ) sort -u TestFileA | uniq
@@ -661,8 +639,6 @@ b. Finds all the files under root which are older than the temp file and moves t
   The same thing using "touch -t" will be like assuming todays date is 21 Aug 2010, 15hours,45mins:
 #touch -t 1008190515 temp
 #find / -type f ! -newer temp -exec mv '{}' ~/backup \;
-
-
 
 =========================================================
 		PLAY with History 
